@@ -5,7 +5,7 @@ RSpec.describe Hashape do
     expect(Hashape::VERSION).not_to be nil
   end
   
-  # These shouldn't fail unless Ruby's undergo a huge breaking change. But you
+  # These shouldn't fail unless Ruby undergoes a huge breaking change. But you
   # never know!
   context 'the === operator' do
     it 'matches objects' do
