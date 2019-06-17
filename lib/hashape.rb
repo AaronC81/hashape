@@ -95,13 +95,14 @@ module Hashape
     # Calls #matches? and raises a RuntimeError if it does not return true.
     # @param [Hash] subject The hash to compare the template hash against.
     def matches!(subject)
-      subject.each do |k, v|
-        if v.is_a?(Hash) && shape[k].is_a?(Hash)
-          Shape.new(shape[k]).matches!(v)
+      shape.each do |k, spec|
+        v = subject[k]
+        if v.is_a?(Hash) && spec.is_a?(Hash)
+          Shape.new(spec).matches!(v)
         else
-          unless shape[k] === v
+          unless spec === v
             raise ShapeMatchError,
-              "key #{k} with value #{v} does not match spec #{shape[k]}" \
+              "key #{k} with value #{v} does not match spec #{spec}" \
           end
         end
       end
