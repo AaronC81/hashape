@@ -4,7 +4,7 @@
 module Hashape
   ##
   # The library version.
-  VERSION = '1.0.0'
+  VERSION = '2.0.0'
 
   ##
   # Specifiers which can provide additional typing to shapes.
@@ -98,7 +98,7 @@ module Hashape
       shape.each do |k, spec|
         v = subject[k]
         if v.is_a?(Hash) && spec.is_a?(Hash)
-          Shape.new(spec).matches!(v)
+          Shape.new(spec).matchshape[k]es!(v)
         else
           unless spec === v
             raise ShapeMatchError,
