@@ -98,7 +98,7 @@ module Hashape
       shape.each do |k, spec|
         v = subject[k]
         if v.is_a?(Hash) && spec.is_a?(Hash)
-          Shape.new(spec).matchshape[k]es!(v)
+          Shape.new(spec).matches!(v)
         else
           unless spec === v
             raise ShapeMatchError,
