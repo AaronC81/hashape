@@ -94,93 +94,95 @@ RSpec.describe Hashape do
     let(:subject) { Shape }
 
     it 'matches correctly with a flat hash' do
-      expect(
-        subject.new({
-          success: true,
-          name: String,
-          age: Integer
-        }).matches?({
-          success: true,
-          name: "Aaron",
-          age: 19
-        })
-      ).to be true
+      subject.new({
+        success: true,
+        name: String,
+        age: Integer
+      }).matches!({
+        success: true,
+        name: "Aaron",
+        age: 19
+      })
 
-      expect(
+      expect {
         subject.new({
           success: true,
           name: String,
           age: Integer
-        }).matches?({
+        }).matches!({
           success: true,
           name: "Aaron",
           age: nil
         })
-      ).to be false
+      }.to raise_error Hashape::ShapeMatchError
 
-      expect(
+      expect {
         subject.new({
           success: true,
           name: String,
           age: Integer
-        }).matches?({
+        }).matches!({
           success: true,
           name: "Aaron",
           age: "19"
         })
-      ).to be false
+      }.to raise_error Hashape::ShapeMatchError
     end
 
     it 'matches correctly with a nested hash' do
-      expect(
-        subject.new({
-          success: true,
-          data: {
-            name: String,
-            age: Integer
-          }
-        }).matches?({
-          success: true,
-          data: {
-            name: "Aaron",
-            age: 19
-          }
-        })
-      ).to be true
+      subject.new({
+        success: true,
+        data: {
+          name: String,
+          age: Integer
+        }
+      }).matches!({
+        success: true,
+        data: {
+          name: "Aaron",
+          age: 19
+        }
+      })
 
-      expect(
+      expect {
         subject.new({
           success: true,
           data: {
             name: String,
             age: Integer
           }
-        }).matches?({
+        }).matches!({
           success: true,
           data: {
             name: "Aaron",
             data: "19"
           }
         })
-      ).to be false
+      }.to raise_error ShapeMatchError
     end
 
     it 'works with specifiers' do
-      expect(
-        subject.new({
-          data: Specifiers::Many.new(Integer)
-        }).matches?({
-          data: [1, 2, 3, 4]
-        })
-      ).to be true
+      subject.new({
+        data: Specifiers::Many.new(Integer)
+      }).matches!({
+        data: [1, 2, 3, 4]
+      })
 
-      expect(
+      expect {
         subject.new({
           data: Specifiers::Many.new(Integer)
-        }).matches?({
+        }).matches!({
           data: [1, 2, "foo", 4]
         })
-      ).to be false
+      }.to raise_error ShapeMatchError
+    end
+
+    it 'requires keys to be present' do
+      expect {
+        subject.new({
+          data: String
+        }).matches!({})
+      }.to raise_error ShapeMatchError
     end
   end
 end
