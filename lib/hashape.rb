@@ -19,7 +19,7 @@ module Hashape
       # @param [*] spec The type spec for this specifier to match against.
       # @return [Specifier] A new specifier.
       def self.[](spec)
-        Specifier.new(spec)
+        self.new(spec)
       end
 
       ##

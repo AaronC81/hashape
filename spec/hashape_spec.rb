@@ -51,6 +51,7 @@ RSpec.describe Hashape do
 
     they 'can be created with a shorthand' do
       expect(Specifiers::Specifier[Integer]).to be_a Specifiers::Specifier
+      expect(Specifiers::Optional[Integer]).to be_a Specifiers::Optional
     end
 
     context 'Optional' do
