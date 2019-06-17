@@ -60,6 +60,11 @@ module Hashape
   end
 
   ##
+  # Raised when Shape#matches! fails.
+  class ShapeMatchError < StandardError
+  end
+
+  ##
   # A template hash representing how a hash should be structured, allowing
   # other hashes to be validated against it.
   class Shape
@@ -80,21 +85,26 @@ module Hashape
     # @return [TrueClass|FalseClass] A boolean indicating whether the subject
     #   hash matches the template hash.
     def matches?(subject)
-      subject.all? do |k, v|
-        if v.is_a?(Hash) && shape[k].is_a?(Hash)
-          Shape.new(shape[k]).matches?(v)
-        else
-          shape[k] === v
-        end
-      end
+      matches!(subject)
+      true
+    rescue ShapeMatchError
+      false
     end
 
     ##
     # Calls #matches? and raises a RuntimeError if it does not return true.
     # @param [Hash] subject The hash to compare the template hash against.
     def matches!(subject)
-      raise unless matches?(subject)
-      nil
+      subject.each do |k, v|
+        if v.is_a?(Hash) && shape[k].is_a?(Hash)
+          Shape.new(shape[k]).matches!(v)
+        else
+          unless shape[k] === v
+            raise ShapeMatchError,
+              "key #{k} with value #{v} does not match spec #{shape[k]}" \
+          end
+        end
+      end
     end
   end
 
